@@ -2,112 +2,159 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <title>For You 💌</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Lato', sans-serif; }
+
+  html, body {
+    font-family: 'Lato', sans-serif;
+    width: 100%; min-height: 100vh;
+    overflow-x: hidden;
+    background: #fff5f8;
+  }
 
   /* ── music player ── */
   .music-player {
-    position: fixed; bottom: 18px; right: 18px; z-index: 9999;
-    background: rgba(255,255,255,0.85); backdrop-filter: blur(8px);
+    position: fixed; bottom: 16px; right: 16px; z-index: 9999;
+    background: rgba(255,255,255,0.92);
     border: 1.5px solid #f4b8ce; border-radius: 50px;
-    display: flex; align-items: center; gap: 10px;
-    padding: 8px 16px 8px 10px;
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 14px 7px 8px;
     box-shadow: 0 4px 20px rgba(232,103,138,.18);
   }
   .music-btn {
-    width: 34px; height: 34px; border-radius: 50%; border: none;
-    background: #e8678a; color: #fff; font-size: 15px;
+    width: 32px; height: 32px; border-radius: 50%; border: none;
+    background: #e8678a; color: #fff; font-size: 14px;
     cursor: pointer; display: flex; align-items: center; justify-content: center;
-    transition: transform .15s;
+    transition: transform .15s; flex-shrink: 0;
   }
   .music-btn:hover { transform: scale(1.1); }
-  .music-label { font-size: 12px; color: #c96; font-family: 'Lato', sans-serif; font-weight: 300; letter-spacing: .5px; }
+  .music-label { font-size: 11px; color: #c96; font-family: 'Lato', sans-serif; font-weight: 300; letter-spacing: .4px; white-space: nowrap; }
   .music-note { display: inline-block; animation: noteFloat 1.8s ease-in-out infinite; }
   @keyframes noteFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
 
   /* ── screens ── */
-  .screen { display: none; min-height: 520px; align-items: center; justify-content: center; flex-direction: column; padding: 2rem; text-align: center; }
+  .screen {
+    display: none;
+    min-height: 100vh;
+    align-items: center; justify-content: center; flex-direction: column;
+    padding: 2rem 1.5rem 6rem;
+    text-align: center;
+    position: relative;
+  }
   .screen.active { display: flex; }
 
+  /* ── page 1 ── */
   .hearts-bg { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
   .floating-heart { position: absolute; animation: floatUp 6s ease-in infinite; opacity: 0; }
-  @keyframes floatUp { 0%{transform:translateY(0) rotate(0deg);opacity:0} 10%{opacity:.6} 90%{opacity:.4} 100%{transform:translateY(-500px) rotate(20deg);opacity:0} }
+  @keyframes floatUp { 0%{transform:translateY(0) rotate(0deg);opacity:0} 10%{opacity:.6} 90%{opacity:.4} 100%{transform:translateY(-100vh) rotate(20deg);opacity:0} }
 
-  .page1-inner { position: relative; z-index: 1; }
-  .emoji-big { font-size: 60px; margin-bottom: 1rem; animation: bounce 2s ease-in-out infinite; }
+  .page1-inner { position: relative; z-index: 1; width: 100%; }
+  .emoji-big { font-size: 56px; margin-bottom: 1rem; animation: bounce 2s ease-in-out infinite; }
   @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-  .page1-title { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 500; color: #4a2035; margin-bottom: .4rem; }
-  .page1-sub { font-size: 15px; color: #888; font-weight: 300; margin-bottom: .3rem; }
-  .page1-subsub { font-size: 13px; color: #e8678a; margin-bottom: 2rem; font-family: 'Playfair Display', serif; font-style: italic; }
+  .page1-title { font-family: 'Playfair Display', serif; font-size: clamp(22px, 6vw, 30px); font-weight: 500; color: #4a2035; margin-bottom: .4rem; }
+  .page1-sub { font-size: clamp(13px, 3.5vw, 15px); color: #888; font-weight: 300; margin-bottom: .3rem; }
+  .page1-subsub { font-size: clamp(12px, 3vw, 13px); color: #e8678a; margin-bottom: 2rem; font-family: 'Playfair Display', serif; font-style: italic; }
 
-  .btn-row { display: flex; gap: 20px; justify-content: center; align-items: center; flex-wrap: wrap; min-height: 60px; }
-  .btn-yes { padding: 14px 36px; border-radius: 50px; border: none; background: #e8678a; color: #fff; font-size: 16px; font-family: 'Lato', sans-serif; font-weight: 400; cursor: pointer; transition: transform .15s, box-shadow .15s; box-shadow: 0 4px 16px rgba(232,103,138,.35); }
-  .btn-yes:hover { transform: scale(1.06); box-shadow: 0 6px 22px rgba(232,103,138,.5); }
+  .btn-row { display: flex; gap: 16px; justify-content: center; align-items: center; flex-wrap: wrap; min-height: 56px; }
+  .btn-yes {
+    padding: 13px 32px; border-radius: 50px; border: none;
+    background: #e8678a; color: #fff;
+    font-size: clamp(14px, 4vw, 16px);
+    font-family: 'Lato', sans-serif; font-weight: 400;
+    cursor: pointer; transition: transform .15s, box-shadow .15s;
+    box-shadow: 0 4px 16px rgba(232,103,138,.35);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-yes:active { transform: scale(0.97); }
 
-  .btn-no { padding: 14px 36px; border-radius: 50px; border: 1.5px solid #e8a0be; background: transparent; color: #aaa; font-size: 16px; font-family: 'Lato', sans-serif; cursor: pointer; position: fixed; transition: background .2s; z-index: 999; }
-  .btn-no:hover { background: #fde8f0; }
+  /* runaway button — fixed, constrained to viewport */
+  .btn-no {
+    padding: 12px 28px; border-radius: 50px;
+    border: 1.5px solid #e8a0be; background: transparent;
+    color: #bbb; font-size: clamp(13px, 3.5vw, 15px);
+    font-family: 'Lato', sans-serif;
+    cursor: pointer; position: fixed; z-index: 998;
+    transition: background .2s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: none;
+  }
 
-  .no-counter { font-size: 12px; color: #e8678a; margin-top: .5rem; font-family: 'Playfair Display', serif; font-style: italic; min-height: 18px; opacity: 0; transition: opacity .3s; position: relative; z-index: 1; }
+  .no-counter {
+    font-size: 12px; color: #e8678a; margin-top: .6rem;
+    font-family: 'Playfair Display', serif; font-style: italic;
+    min-height: 18px; opacity: 0; transition: opacity .3s;
+    position: relative; z-index: 1;
+  }
   .no-counter.show { opacity: 1; }
 
-  /* envelope */
-  #page2 { background: transparent; }
-  .envelope-wrap { width: 260px; height: 180px; position: relative; cursor: pointer; margin-bottom: 1.5rem; }
-  .env-body { width: 260px; height: 180px; background: #fde8f0; border: 2px solid #e8678a; border-radius: 4px; position: absolute; bottom: 0; overflow: hidden; }
-  .env-flap { width: 0; height: 0; border-left: 130px solid transparent; border-right: 130px solid transparent; border-top: 90px solid #f4b8ce; position: absolute; top: 0; left: 0; transform-origin: top center; transition: transform .65s ease; z-index: 3; }
+  /* ── page 2 envelope ── */
+  .page2-intro { font-family: 'Playfair Display', serif; font-size: clamp(13px, 3.5vw, 15px); font-style: italic; color: #888; margin-bottom: 1.5rem; }
+
+  .envelope-wrap { width: min(260px, 80vw); aspect-ratio: 13/9; position: relative; cursor: pointer; margin-bottom: 1.5rem; }
+  .env-body { width: 100%; height: 100%; background: #fde8f0; border: 2px solid #e8678a; border-radius: 4px; position: absolute; bottom: 0; overflow: hidden; }
+  .env-flap { width: 0; height: 0; border-left: 50% solid transparent; border-right: 50% solid transparent; border-top: calc(50% * 0.69) solid #f4b8ce; position: absolute; top: 0; left: 0; transform-origin: top center; transition: transform .65s ease; z-index: 3; }
   .env-flap.open { transform: rotateX(180deg); }
-  .env-bottom-fold { width: 0; height: 0; border-left: 130px solid transparent; border-right: 130px solid transparent; border-bottom: 90px solid #f9cfe0; position: absolute; bottom: 0; left: 0; z-index: 1; }
-  .env-left-fold { width: 0; height: 0; border-top: 90px solid transparent; border-bottom: 90px solid transparent; border-left: 120px solid #f7c2d5; position: absolute; top: 0; left: 0; z-index: 1; }
-  .env-right-fold { width: 0; height: 0; border-top: 90px solid transparent; border-bottom: 90px solid transparent; border-right: 120px solid #f5bad0; position: absolute; top: 0; right: 0; z-index: 1; }
-  .env-heart { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 28px; z-index: 4; transition: transform .3s; }
-  .envelope-wrap:hover .env-heart { transform: translate(-50%,-50%) scale(1.2); }
-  .letter-peek { position: absolute; width: 200px; background: #fff; border: 1px solid #e8a0be; border-radius: 6px; top: 20px; left: 30px; height: 120px; z-index: 2; display: flex; align-items: center; justify-content: center; transition: transform .65s ease; }
-  .letter-peek.rising { transform: translateY(-80px); }
+  .env-bottom-fold { width: 0; height: 0; border-left: 50% solid transparent; border-right: 50% solid transparent; border-bottom: calc(50% * 0.69) solid #f9cfe0; position: absolute; bottom: 0; left: 0; z-index: 1; }
+  .env-left-fold { width: 0; height: 0; border-top: 50% solid transparent; border-bottom: 50% solid transparent; border-left: calc(50% * 0.92) solid #f7c2d5; position: absolute; top: 0; left: 0; z-index: 1; }
+  .env-right-fold { width: 0; height: 0; border-top: 50% solid transparent; border-bottom: 50% solid transparent; border-right: calc(50% * 0.92) solid #f5bad0; position: absolute; top: 0; right: 0; z-index: 1; }
+  .env-heart { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: clamp(22px, 6vw, 28px); z-index: 4; transition: transform .3s; }
+  .envelope-wrap:active .env-heart { transform: translate(-50%,-50%) scale(1.2); }
+  .letter-peek { position: absolute; width: 77%; background: #fff; border: 1px solid #e8a0be; border-radius: 6px; top: 10%; left: 11.5%; height: 65%; z-index: 2; display: flex; align-items: center; justify-content: center; transition: transform .65s ease; }
+  .letter-peek.rising { transform: translateY(-75%); }
   .letter-peek-text { font-family: 'Playfair Display', serif; font-size: 11px; color: #c96; text-align: center; padding: 8px; line-height: 1.5; opacity: 0; transition: opacity .4s .4s; }
   .letter-peek.rising .letter-peek-text { opacity: 1; }
-  .env-hint { font-size: 13px; color: #aaa; font-weight: 300; margin-bottom: 1.5rem; animation: subtlePulse 2s ease-in-out infinite; }
+  .env-hint { font-size: clamp(12px, 3vw, 13px); color: #aaa; font-weight: 300; margin-bottom: 1.5rem; animation: subtlePulse 2s ease-in-out infinite; }
   @keyframes subtlePulse { 0%,100%{opacity:.7} 50%{opacity:1} }
 
-  /* letter */
-  #page3 { background: transparent; }
-  .letter-card { background: #fff8fb; border: 1.5px solid #f0b8cc; border-radius: 20px; padding: 2rem 2rem 1.5rem; max-width: 400px; width: 100%; box-shadow: 0 6px 32px rgba(232,103,138,.13); animation: letterIn .5s ease; position: relative; overflow: hidden; }
+  /* ── page 3 letter ── */
+  .letter-card {
+    background: #fff8fb; border: 1.5px solid #f0b8cc;
+    border-radius: 20px; padding: 1.75rem 1.5rem 1.5rem;
+    max-width: 420px; width: 100%;
+    box-shadow: 0 6px 32px rgba(232,103,138,.13);
+    animation: letterIn .5s ease; position: relative; overflow: hidden;
+  }
   .letter-card::before { content: ''; position: absolute; top: -30px; right: -30px; width: 100px; height: 100px; background: #fde8f0; border-radius: 50%; opacity: .5; }
-  .letter-card::after { content: ''; position: absolute; bottom: -20px; left: -20px; width: 70px; height: 70px; background: #fde8f0; border-radius: 50%; opacity: .5; }
+  .letter-card::after  { content: ''; position: absolute; bottom: -20px; left: -20px; width: 70px; height: 70px; background: #fde8f0; border-radius: 50%; opacity: .5; }
   @keyframes letterIn { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
-  .letter-deco { font-size: 32px; margin-bottom: .75rem; }
+  .letter-deco { font-size: 30px; margin-bottom: .75rem; }
   .letter-salutation { font-family: 'Playfair Display', serif; font-size: 14px; color: #c96; margin-bottom: .75rem; font-style: italic; }
-  .letter-body { font-family: 'Lato', sans-serif; font-size: 17px; font-weight: 300; color: #4a2035; line-height: 1.85; margin-bottom: 1.25rem; position: relative; z-index: 1; }
+  .letter-body { font-family: 'Lato', sans-serif; font-size: clamp(15px, 4vw, 17px); font-weight: 300; color: #4a2035; line-height: 1.85; margin-bottom: 1.25rem; position: relative; z-index: 1; }
   .letter-body em { font-family: 'Playfair Display', serif; font-style: italic; }
   .letter-sign { font-family: 'Playfair Display', serif; font-size: 14px; color: #c96; font-style: italic; margin-bottom: 1.5rem; position: relative; z-index: 1; }
-  .btn-forgive { padding: 14px 40px; border-radius: 50px; border: none; background: #e8678a; color: #fff; font-size: 16px; font-family: 'Lato', sans-serif; cursor: pointer; transition: transform .15s; box-shadow: 0 4px 20px rgba(201,79,116,.35); animation: pulse 2s ease-in-out infinite; position: relative; z-index: 1; }
+  .btn-forgive {
+    padding: 13px 36px; border-radius: 50px; border: none;
+    background: #e8678a; color: #fff;
+    font-size: clamp(14px, 4vw, 16px);
+    font-family: 'Lato', sans-serif;
+    cursor: pointer; transition: transform .15s;
+    box-shadow: 0 4px 20px rgba(201,79,116,.35);
+    animation: pulse 2s ease-in-out infinite;
+    position: relative; z-index: 1;
+    -webkit-tap-highlight-color: transparent;
+  }
   @keyframes pulse { 0%,100%{box-shadow:0 4px 20px rgba(201,79,116,.3)} 50%{box-shadow:0 4px 36px rgba(201,79,116,.6)} }
-  .btn-forgive:hover { transform: scale(1.05); }
+  .btn-forgive:active { transform: scale(0.97); }
 
-  /* page 4 */
-  #page4 { background: transparent; }
+  /* ── page 4 ── */
   .confetti-wrap { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
   .conf { position: absolute; animation: confettifall 2.5s ease-in forwards; opacity: 0; }
-  @keyframes confettifall { 0%{transform:translateY(-20px) rotate(0deg);opacity:1} 100%{transform:translateY(520px) rotate(400deg);opacity:0} }
+  @keyframes confettifall { 0%{transform:translateY(-20px) rotate(0deg);opacity:1} 100%{transform:translateY(100vh) rotate(400deg);opacity:0} }
   .page4-inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
 
-  /* ── PHOTO: hardcoded ── */
   .photo-circle {
-    width: 260px; height: 260px; border-radius: 50%;
-    object-fit: cover;
+    width: min(240px, 72vw); height: min(240px, 72vw);
+    border-radius: 50%; object-fit: cover;
     border: 4px solid #e8678a;
     box-shadow: 0 6px 28px rgba(232,103,138,.35);
     margin-bottom: 1.25rem;
   }
 
-  .page4-msg { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 500; color: #c94f74; margin-bottom: .4rem; }
-  .page4-sub { font-family: 'Lato', sans-serif; font-size: 15px; font-weight: 300; color: #888; max-width: 300px; line-height: 1.6; }
-
-  /* page 2 sub text */
-  .page2-intro { font-family: 'Playfair Display', serif; font-size: 15px; font-style: italic; color: #888; margin-bottom: 1.5rem; }
+  .page4-msg { font-family: 'Playfair Display', serif; font-size: clamp(20px, 5.5vw, 26px); font-weight: 500; color: #c94f74; margin-bottom: .5rem; }
+  .page4-sub { font-family: 'Lato', sans-serif; font-size: clamp(13px, 3.5vw, 15px); font-weight: 300; color: #888; max-width: 300px; line-height: 1.6; }
 </style>
 </head>
 <body>
@@ -118,73 +165,67 @@
   <span class="music-label"><span class="music-note">♪</span> playing for you</span>
 </div>
 <audio id="bgMusic" loop>
-  <!-- 🎵 Replace "your-song.mp3" with your actual MP3 filename -->
   <source src="Prateek Kuhad - Into The Night.mp3" type="audio/mpeg">
 </audio>
 
-<div style="position:relative; min-height:520px;">
+<!-- PAGE 1 -->
+<div class="screen active" id="page1">
+  <div class="hearts-bg" id="heartsBg"></div>
+  <div class="page1-inner">
+    <div class="emoji-big">🌸</div>
+    <div class="page1-title">Hey Pretty Boy 💕</div>
+    <div class="page1-sub">I've got something I need to tell you...</div>
+    <div class="page1-subsub">psst — it's important 🥺</div>
+    <div class="btn-row">
+      <button class="btn-yes" onclick="goToPage2()">Sure 💌</button>
+    </div>
+    <div class="no-counter" id="noCounter"></div>
+  </div>
+</div>
 
-  <!-- PAGE 1 -->
-  <div class="screen active" id="page1">
-    <div class="hearts-bg" id="heartsBg"></div>
-    <div class="page1-inner">
-      <div class="emoji-big">🌸</div>
-      <div class="page1-title">Hey Pretty Boy 💕</div>
-      <div class="page1-sub">I've got something I need to tell you...</div>
-      <div class="page1-subsub">psst — it's important 🥺</div>
-      <div class="btn-row">
-        <button class="btn-yes" onclick="goToPage2()">Sure 💌</button>
+<!-- PAGE 2 -->
+<div class="screen" id="page2">
+  <p class="page2-intro">Good choice. I knew you'd come around 💌</p>
+  <div class="envelope-wrap" id="envelope" onclick="openEnvelope()">
+    <div class="env-body">
+      <div class="env-left-fold"></div>
+      <div class="env-right-fold"></div>
+      <div class="env-bottom-fold"></div>
+      <div class="letter-peek" id="letterPeek">
+        <div class="letter-peek-text">A little note<br>just for you ♡</div>
       </div>
-      <div class="no-counter" id="noCounter"></div>
+      <div class="env-flap" id="envFlap"></div>
+      <div class="env-heart" id="envHeart">💌</div>
     </div>
   </div>
+  <p class="env-hint">Tap the envelope to open it ✨</p>
+</div>
 
-  <!-- PAGE 2 -->
-  <div class="screen" id="page2">
-    <p class="page2-intro">Good choice. I knew you'd come around 💌</p>
-    <div class="envelope-wrap" id="envelope" onclick="openEnvelope()">
-      <div class="env-body">
-        <div class="env-left-fold"></div>
-        <div class="env-right-fold"></div>
-        <div class="env-bottom-fold"></div>
-        <div class="letter-peek" id="letterPeek">
-          <div class="letter-peek-text">A little note<br>just for you ♡</div>
-        </div>
-        <div class="env-flap" id="envFlap"></div>
-        <div class="env-heart" id="envHeart">💌</div>
-      </div>
+<!-- PAGE 3 -->
+<div class="screen" id="page3">
+  <div class="letter-card">
+    <div class="letter-deco">💗</div>
+    <div class="letter-salutation">My dearest love,</div>
+    <div class="letter-body">
+      I am so, so sorry.<br><br>
+      I should not have laughed.<br>
+      You were being vulnerable to me and I hate that I made you feel that way.<br><br>
+      Baby that was not the intention at all. You mean everything to me. 🌹
+      I Love You the most. ❤️‍🩹
     </div>
-    <p class="env-hint">Tap the envelope to open it ✨</p>
+    <div class="letter-sign">Forever and always your momo ♡</div>
+    <button class="btn-forgive" onclick="goToPage4()">Forgive me plsssss? 🥺</button>
   </div>
+</div>
 
-  <!-- PAGE 3 -->
-  <div class="screen" id="page3">
-    <div class="letter-card">
-      <div class="letter-deco">💗</div>
-      <div class="letter-salutation">My dearest love,</div>
-      <div class="letter-body">
-        I am so, so sorry.<br><br>
-        I should not have laughed.<br>
-        You were being vulnerable to me and I hate that I made you feel that way.<br><br>
-        Baby that was not the intention at all. You mean everything to me. 🌹
-        I Love You the most. ❤️‍🩹
-      </div>
-      <div class="letter-sign">Forever and always your momo ♡</div>
-      <button class="btn-forgive" onclick="goToPage4()">Forgive me plsssss? 🥺</button>
-    </div>
+<!-- PAGE 4 -->
+<div class="screen" id="page4">
+  <div class="confetti-wrap" id="confettiWrap"></div>
+  <div class="page4-inner">
+    <img class="photo-circle" src="us.jpg" alt="us" />
+    <div class="page4-msg">You're my whole heart 💞</div>
+    <div class="page4-sub">P.s. You will always be the best thing I'll ever do 😉. I am lucky to have you. 🌸</div>
   </div>
-
-  <!-- PAGE 4 -->
-  <div class="screen" id="page4">
-    <div class="confetti-wrap" id="confettiWrap"></div>
-    <div class="page4-inner">
-      <!-- 📸 Replace "your-photo.jpg" with your actual photo filename -->
-      <img class="photo-circle" src="us.jpg" alt="HUIR" />
-      <div class="page4-msg">You're my whole heart 💞</div>
-      <div class="page4-sub">P.s. You will always be the best thing I'll ever do😉. I am lucky to have you. 🌸</div>
-    </div>
-  </div>
-
 </div>
 
 <!-- Runaway button -->
@@ -194,21 +235,41 @@
 (function(){
   /* ── music ── */
   const audio = document.getElementById('bgMusic');
-  const btn   = document.getElementById('musicBtn');
+  const musicBtn = document.getElementById('musicBtn');
   let playing = false;
 
   window.toggleMusic = function(){
-    if(playing){ audio.pause(); btn.textContent = '▶'; playing = false; }
-    else { audio.play().catch(()=>{}); btn.textContent = '⏸'; playing = true; }
+    if(playing){ audio.pause(); musicBtn.textContent = '▶'; playing = false; }
+    else { audio.play().catch(()=>{}); musicBtn.textContent = '⏸'; playing = true; }
   };
-
-  /* auto-play on first user interaction */
   document.addEventListener('click', function startAudio(){
-    if(!playing){ audio.play().then(()=>{ btn.textContent = '⏸'; playing = true; }).catch(()=>{}); }
+    if(!playing){ audio.play().then(()=>{ musicBtn.textContent = '⏸'; playing = true; }).catch(()=>{}); }
     document.removeEventListener('click', startAudio);
   }, { once: true });
 
   /* ── pages ── */
+  function showPage(id){
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  /* ── floating hearts ── */
+  const bg = document.getElementById('heartsBg');
+  const emojis = ['💕','💗','💓','🌸','✨','💖','🩷'];
+  setInterval(() => {
+    const h = document.createElement('span');
+    h.className = 'floating-heart';
+    h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    h.style.left = Math.random() * 90 + '%';
+    h.style.bottom = '0';
+    h.style.fontSize = (12 + Math.random() * 12) + 'px';
+    h.style.animationDuration = (4 + Math.random() * 4) + 's';
+    bg.appendChild(h);
+    setTimeout(() => h.remove(), 8000);
+  }, 800);
+
+  /* ── runaway button ── */
   let noAttempts = 0;
   const messages = [
     "are you sure you don't want to see what's next? 🥺",
@@ -220,52 +281,45 @@
     "Now I am mad, stop it!! 😤"
   ];
 
-  function showPage(id){
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-  }
-
-  const bg = document.getElementById('heartsBg');
-  const emojis = ['💕','💗','💓','🌸','✨','💖','🩷'];
-  setInterval(() => {
-    const h = document.createElement('span');
-    h.className = 'floating-heart';
-    h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-    h.style.left = Math.random() * 90 + '%';
-    h.style.bottom = '0';
-    h.style.fontSize = (14 + Math.random() * 14) + 'px';
-    h.style.animationDuration = (4 + Math.random() * 4) + 's';
-    bg.appendChild(h);
-    setTimeout(() => h.remove(), 8000);
-  }, 750);
-
   const noBtn = document.getElementById('btnNo');
   let btnX = 0, btnY = 0;
+
+  function getBtnSize(){
+    const r = noBtn.getBoundingClientRect();
+    return { w: r.width || 140, h: r.height || 48 };
+  }
 
   function placeButtonInitial(){
     const vw = window.innerWidth;
     const vh = window.innerHeight;
-    btnX = vw / 2 + 100;
-    btnY = vh / 2 + 20;
+    const { w, h } = getBtnSize();
+    btnX = Math.min(vw / 2 + 80, vw - w - 12);
+    btnY = Math.min(vh / 2 + 60, vh - h - 12);
     noBtn.style.left = btnX + 'px';
     noBtn.style.top  = btnY + 'px';
   }
-  placeButtonInitial();
+  setTimeout(placeButtonInitial, 100);
 
   function runAway(){
     noAttempts++;
-    const vw = Math.max(window.innerWidth - 160, 200);
-    const vh = Math.max(window.innerHeight - 60, 200);
-    let newX, newY, dist = 0, attempts = 0;
+    const { w, h } = getBtnSize();
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const maxX = vw - w - 10;
+    const maxY = vh - h - 10;
+    const minX = 10;
+    const minY = 10;
+
+    let newX, newY, dist = 0, tries = 0;
     do {
-      newX = 20 + Math.random() * (vw - 40);
-      newY = 80 + Math.random() * (vh - 100);
-      dist = Math.sqrt((newX - btnX) ** 2 + (newY - btnY) ** 2);
-      attempts++;
-    } while (dist < 150 && attempts < 30);
+      newX = minX + Math.random() * (maxX - minX);
+      newY = minY + Math.random() * (maxY - minY);
+      dist = Math.hypot(newX - btnX, newY - btnY);
+      tries++;
+    } while (dist < 100 && tries < 30);
 
     btnX = newX; btnY = newY;
-    noBtn.style.transition = 'left .28s cubic-bezier(.34,1.56,.64,1), top .28s cubic-bezier(.34,1.56,.64,1)';
+    noBtn.style.transition = 'left .3s cubic-bezier(.34,1.56,.64,1), top .3s cubic-bezier(.34,1.56,.64,1)';
     noBtn.style.left = btnX + 'px';
     noBtn.style.top  = btnY + 'px';
 
@@ -279,8 +333,8 @@
   }
 
   noBtn.addEventListener('mouseover', runAway);
-  noBtn.addEventListener('click', runAway);
-  noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); runAway(); });
+  noBtn.addEventListener('click',     runAway);
+  noBtn.addEventListener('touchstart', e => { e.preventDefault(); runAway(); }, { passive: false });
 
   window.goToPage2 = function(){
     noBtn.style.display = 'none';
@@ -289,8 +343,8 @@
 
   window.openEnvelope = function(){
     document.getElementById('envFlap').classList.add('open');
-    setTimeout(() => { document.getElementById('letterPeek').classList.add('rising'); }, 400);
-    setTimeout(() => { showPage('page3'); }, 1700);
+    setTimeout(() => document.getElementById('letterPeek').classList.add('rising'), 400);
+    setTimeout(() => showPage('page3'), 1700);
   };
 
   window.goToPage4 = function(){
@@ -302,7 +356,7 @@
     const wrap = document.getElementById('confettiWrap');
     const colors = ['#e8678a','#f4b8ce','#ffd6e7','#c94f74','#ffb3c6','#ff85a1','#ffc2d1','#fff'];
     function burst(){
-      for(let i = 0; i < 18; i++){
+      for(let i = 0; i < 20; i++){
         const c = document.createElement('div');
         c.className = 'conf';
         c.style.background = colors[Math.floor(Math.random() * colors.length)];
@@ -311,8 +365,7 @@
         c.style.animationDelay = (Math.random() * 1.2) + 's';
         c.style.animationDuration = (1.6 + Math.random() * 1.4) + 's';
         const size = 6 + Math.random() * 8;
-        c.style.width = size + 'px';
-        c.style.height = size + 'px';
+        c.style.width = size + 'px'; c.style.height = size + 'px';
         c.style.borderRadius = Math.random() > .5 ? '50%' : '2px';
         wrap.appendChild(c);
         setTimeout(() => c.remove(), 3500);
